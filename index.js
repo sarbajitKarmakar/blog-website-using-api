@@ -41,13 +41,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Write your code here//
 
 //CHALLENGE 1: GET All posts
-app.get("/", (req,res) =>{
+app.get("/posts", (req,res) =>{
   res.json(posts);
-})
+});
 
 //CHALLENGE 2: GET a specific post by id
+app.get("/posts/:id", (req,res) =>{
+  const id = parseInt(req.params.id);
+  const vlog = posts.find(elm => elm.id === id);
+  if (vlog) {
+    console.log(vlog);
+  } else {
+    res.status(404).json({ error: 'Post not found' });
+  }
+});
+
 
 //CHALLENGE 3: POST a new post
+app.post("/posts", (req, res) =>{
+  const newId = posts.length;
+  const newpost = {
+    id: newId,
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.content,
+    date: new Date().toISOString(),
+  }
+});
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
 
