@@ -13,7 +13,7 @@ let posts = [
       "Decentralized Finance (DeFi) is an emerging and rapidly evolving field in the blockchain industry. It refers to the shift from traditional, centralized financial systems to peer-to-peer finance enabled by decentralized technologies built on Ethereum and other blockchains. With the promise of reduced dependency on the traditional banking sector, DeFi platforms offer a wide range of services, from lending and borrowing to insurance and trading.",
     author: "Alex Thompson",
     date: "2023-08-01T10:00:00Z",
-  }, 
+  },
   {
     id: 2,
     title: "The Impact of Artificial Intelligence on Modern Businesses",
@@ -41,54 +41,52 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Write your code here//
 
 //CHALLENGE 1: GET All posts
-app.get("/posts", (req,res) =>{
-  res.json(posts);
-});
+app.route("/posts")
+  .get((req, res) => {
+    res.json(posts);
+  })
+  .post((req, res) => {
+    const newId = posts.length + 1;
+    const newpost = {
+      id: newId,
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.content,
+      date: new Date(),
+    }
+    posts.push(newpost);
+    res.json(newpost);
+  });
 
 //CHALLENGE 2: GET a specific post by id
-app.get("/posts/:id", (req,res) =>{
-  const id = parseInt(req.params.id);
-  const vlog = posts.find(elm => elm.id === id);
-  if (vlog) {
-    res.json(vlog);
-  } else {
-    res.status(404).json({ error: 'Post not found' });
-  }
-});
+app.route("/posts/:id")
+  .get((req, res) => {
+    const id = parseInt(req.params.id);
+    const vlog = posts.find(elm => elm.id === id);
+    if (vlog) {
+      res.json(vlog);
+    } else {
+      res.status(404).json({ error: 'Post not found' });
+    }
+  })
+  .patch((req, res) => {
+    const id = parseInt(req.params.id);
+    const postId = posts.findIndex(elem => elem.id === id);
+    posts[postId].title = req.body.title || posts[postId].title;
+    posts[postId].content = req.body.content || posts[postId].content;
+    posts[postId].author = req.body.author || posts[postId].author;
+    res.json(posts[postId]);
+  })
+  .delete((req, res) => {
+    const id = parseInt(req.params.id);
+    const postId = posts.findIndex(elem => elem.id === id);
+    console.log(postId);
+    posts.splice(postId, 1);
+    res.json(posts);
+  });
 
 
-//CHALLENGE 3: POST a new post
-app.post("/posts", (req, res) =>{
-  const newId = posts.length+1;
-  const newpost = {
-    id: newId,
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.content,
-    date: new Date(),
-  }
-  posts.push(newpost);
-  res.json(newpost);
-});
 
-//CHALLENGE 4: PATCH a post when you just want to update one parameter
-app.patch("/posts/:id", (req, res) =>{
-  const id = parseInt(req.params.id);
-  const postId = posts.findIndex(elem => elem.id === id);
-  posts[postId].title = req.body.title || posts[postId].title;
-  posts[postId].content = req.body.content || posts[postId].content;
-  posts[postId].author = req.body.author || posts[postId].author;
-  res.json(posts[postId]);
-})
-
-//CHALLENGE 5: DELETE a specific post by providing the post id.
-app.delete("/posts/:id" , (req, res) =>{
-  const id = parseInt(req.params.id);
-  const postId = posts.findIndex(elem => elem.id === id);
-  console.log(postId);
-  posts.splice(postId,1);
-  res.json(posts);
-});
 
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
