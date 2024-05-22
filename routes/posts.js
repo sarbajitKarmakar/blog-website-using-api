@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 
 
 let lastId = 3;
@@ -33,7 +33,7 @@ let posts = [
 
 const router = express.Router();
 
-router.route("/posts")
+router.route("/")
     .get((req, res) => {
         res.json(posts);
     })
@@ -50,7 +50,7 @@ router.route("/posts")
         res.json(newpost);
     });
 
-router.route("/posts/:id")
+router.route("/:id")
     .get((req, res) => {
         const id = parseInt(req.params.id);
         const vlog = posts.find(elm => elm.id === id);

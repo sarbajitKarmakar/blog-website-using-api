@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 
-const routes = require("./routes/posts.js");
+const route = require("./routes/posts.js");
 
 const app = express();
 const port = 4000;
@@ -11,7 +11,7 @@ const port = 4000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/posts", router);
+app.use("/posts", route);
 //Write your code here//
 
 //CHALLENGE 1: GET All posts
